@@ -29,7 +29,7 @@
             "storage": "data.sqlite"
         }
     },
-    "APPSTATEPATH": "Apostate.json",
+    "APPSTATEPATH": "Appstate.json",
     "FCAOption": {
         "forceLogin": true,
         "listenEvents": true,
