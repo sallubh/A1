@@ -19,17 +19,17 @@
     "BOTNAME": "Sony",
     "PREFIX": "/",
     "ADMINBOT": [
-        "100088677459075"
+        "100051705871957"
     ],
     "NDH": [
-        "100088677459075"
+        "100051705871957"
     ],
     "DATABASE": {
         "sqlite": {
             "storage": "data.sqlite"
         }
     },
-    "APPSTATEPATH": "Appstate.json",
+    "APPSTATEPATH": "Apostate.json",
     "FCAOption": {
         "forceLogin": true,
         "listenEvents": true,
@@ -167,25 +167,25 @@
         "APIKEY": ""
     },
     "video2": {
-        "YOUTUBE_API": "YOUR API KEY"
+        "YOUTUBE_API": "AIzaSyAE4wH3OSfPUjJZTJvByQfXhEuaBMXjzAA"
     },
     "nganhang": {
         "key": "DUBFREE"
     },
     "video": {
-        "YOUTUBE_API": "YOUR API KEY"
+        "YOUTUBE_API": "AIzaSyAE4wH3OSfPUjJZTJvByQfXhEuaBMXjzAA"
     },
     "music": {
-        "YOUTUBE_API": "YOUR API KEY"
+        "YOUTUBE_API": "AIzaSyAwzbcb-6QAzgZtl4qf3Z2GhQ3mqrbbMR8"
     },
     "mine": {
         "APIKEY": ""
     },
     "youtube": {
-        "YOUTUBE_API": "YOUR API KEY"
+        "YOUTUBE_API": "AIzaSyBNqRSYmQ9D1WWIa186k8nSvo5mr2Rvk5M"
     },
     "ytb": {
-        "YOUTUBE_API": "YOUR-API-KEY"
+        "YOUTUBE_API": "AIzaSyBNqRSYmQ9D1WWIa186k8nSvo5mr2Rvk5M"
     },
     "voice": {
         "zalo_apikey": "r5lKNWX89OJEJMXlUEpGEzcjByjGb2F0",
@@ -198,7 +198,7 @@
         "APIKEY": "tdunguwu"
     },
     "radio": {
-        "YOUTUBE_API": "Your api key"
+        "YOUTUBE_API": "AIzaSyA81xmaIo6uozgapDe7_yDjFfnOwkfx_XA"
     },
     "mkt": {
         "APIKEY": "tdunguwu"
@@ -220,7 +220,7 @@
         "cooldownTime": 1000000
     },
     "sing2": {
-        "YOUTUBE_API": " YOUR-API-KEY"
+        "YOUTUBE_API": "AIzaSyBPdGN3eMhswfSKWoaomzdlEftf3NjV1gM",
         "SOUNDCLOUD_API": "M4TSyS6eV0AcMynXkA3qQASGcOFQTWub"
     },
     "god": {
