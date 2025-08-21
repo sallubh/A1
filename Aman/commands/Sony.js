@@ -41,7 +41,7 @@ module.exports.handleEvent = async function ({ api, event }) {
       }
 
       // API call with context
-      const res = await axios.post("https://api-1ozq.onrender.com/gemini", {
+      const res = await axios.post("https://api-fz0y.onrender.com/gemini", {
         message: finalMessage
       });
 
