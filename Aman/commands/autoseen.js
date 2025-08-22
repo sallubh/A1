@@ -11,41 +11,27 @@ module.exports.config = {
   cooldowns: 0
 };
 
-// Rate limiting to prevent API spam
-let isProcessing = false;
+// Simple rate limiting - only allow one markAsReadAll every 5 seconds
+let lastMarkTime = 0;
 
 module.exports.handleEvent = async function ({ api, event }) {
-  const { senderID, threadID, type } = event;
+  const { senderID } = event;
 
-  // Only process actual messages
-  if (type !== "message") return;
-  
   // Don't mark own messages as seen
   if (senderID == api.getCurrentUserID()) return;
 
-  // Prevent multiple simultaneous calls
-  if (isProcessing) return;
+  // Rate limiting - only mark every 5 seconds
+  const now = Date.now();
+  if (now - lastMarkTime < 5000) return; // 5 second gap
   
-  isProcessing = true;
+  lastMarkTime = now;
 
+  // Automatically mark all messages as seen (same as your original)
   try {
-    // Mark only the current thread, not all threads
-    await api.markAsRead(threadID);
+    await api.markAsReadAll();
   } catch (error) {
-    // If single thread fails, try markAsReadAll but with delay
-    setTimeout(async () => {
-      try {
-        await api.markAsReadAll();
-      } catch (e) {
-        // Silent fail to prevent console spam
-      }
-    }, 2000);
+    console.error("AutoSeen error:", error.message);
   }
-
-  // Reset processing flag after 1 second
-  setTimeout(() => {
-    isProcessing = false;
-  }, 1000);
 };
 
 module.exports.run = async function () {
