@@ -18,7 +18,7 @@ module.exports.handleEvent = async function ({ api, event }) {
 
   const lowerBody = body.toLowerCase();
 
-  // Check if message contains trigger words OR is a reply to bot's message
+  // Trigger words or reply check
   const hasTriggerWords = lowerBody.includes("sony") || lowerBody.includes("bot");
   const isReplyToBot = messageReply && messageReply.senderID == api.getCurrentUserID();
 
@@ -36,7 +36,6 @@ module.exports.handleEvent = async function ({ api, event }) {
       // If replying to bot's message, include context
       if (isReplyToBot && messageReply) {
         const repliedMessage = messageReply.body || "";
-        // Format: "Previous message: [old message] | User's reply: [new message]"
         finalMessage = `Previous message: ${repliedMessage} | User's reply: ${body}`;
       }
 
@@ -53,9 +52,28 @@ module.exports.handleEvent = async function ({ api, event }) {
       const finalMsg = `👤 ${userName}\n\n${res.data.reply}\n\n*★᭄𝐎𝐰𝐧𝐞𝐫 𝐀 𝐊 ⚔️⏤͟͟͞͞★*`;
 
       return api.sendMessage(finalMsg, threadID, messageID);
+
     } catch (error) {
       console.error("Gemini API error:", error.message);
-      return api.sendMessage("⚠️ fir se try kro lgta hai koi problem ho gayi hai: " + error.message, threadID, messageID);
+
+      // Multiple funny/romantic error messages
+      const errorMessages = [
+        "Ye Duniya Ye Mahfil Meri Kam Ki Nhi 🥺",
+        "Aao Chalo Ghum ne Chalte Party Karege Tum hare Pese se🫣",
+        "Zindagi Me Khush Rehna Seekho Udas Krne Ke Liye Log He na🙃",
+        "4 Log Kya Kahege Is Baat Ki Fikar Tum Kyu Kar Rahe ho😜",
+        "Chalo Ib Chalte Hai Ye Log Hame Baat Karne Nhi Dege Sahi se😉",
+        "Tum Mujhse Piyar Karte Ho Na Baby Bolo🥲",
+        "Ek Chumma Tu Mujhko Udhar dede 🙈",
+        "Zindagi Tum Hari Hai To Apni Marzi Se Jio Gulami Kisi ki mat karo ",
+        "Aao Mere saath Chalo Tume Pizza 🍕 Khilau ",
+        "Me To Gareeb Hu Aap Btao Ameer Logo Kaise Ho",
+        "baby Ib chalo na Yaha group me kya Rakha Hai 😂",
+      ];
+
+      const randomMsg = errorMessages[Math.floor(Math.random() * errorMessages.length)];
+
+      return api.sendMessage(randomMsg, threadID, messageID);
     }
   }
 };
