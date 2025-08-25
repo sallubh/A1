@@ -1,82 +1,47 @@
-//========= JoinNoti.js (Clean Version) =========//
-const axios = require("axios");
-
 module.exports.config = {
-  name: "joinNoti",
-  eventType: ["log:subscribe"],
-  version: "1.0.3",
+  name: "joinnoti",
+  version: "1.0.0",
+  hasPermssion: 0,
   credits: "Aman Khan",
-  description: "Welcome new members with custom lines + owner info + media attachment",
+  description: "Send a custom join notification with random image & owner info",
+  commandCategory: "group",
+  usages: "",
+  cooldowns: 5
 };
 
 module.exports.run = () => {};
 
-// Handle join events
 module.exports.handleEvent = async function ({ api, event }) {
-  const { threadID, logMessageData, logMessageType } = event;
+  try {
+    if (event.logMessageType === "log:subscribe") {
+      const threadID = event.threadID;
 
-  // ✅ Agar BOT khud group me add ho
-  if (logMessageType === "log:subscribe" && logMessageData.addedParticipants.some(i => i.userFbId == api.getCurrentUserID())) {
-    return api.sendMessage(
-      `🤖 Hello doston, mai ${global.config.BOTNAME || "BOT"} group me aa gaya hu!`,
-      threadID
-    );
-  }
+      // Added member info
+      const addedUser = event.logMessageData.addedParticipants[0];
+      const name = addedUser.fullName || "Naya Member";
 
-  // ✅ Normal User Add Hua
-  if (logMessageType === "log:subscribe") {
-    try {
-      const threadInfo = await api.getThreadInfo(threadID);
-      const { threadName, participantIDs } = threadInfo;
-
-      let mentions = [];
-      let nameArray = [];
-      let memLength = [];
-      let i = 0;
-
-      for (let p of logMessageData.addedParticipants) {
-        nameArray.push(p.fullName);
-        mentions.push({ tag: p.fullName, id: p.userFbId });
-        memLength.push(participantIDs.length - i++);
-      }
-      memLength.sort((a, b) => a - b);
-
-      // ✅ Yaha ap multiple random lines dal sakte ho
-      const randomLines = [
-        "⚡ Stay active and enjoy your time!",
-        "🌹 Respect sabko, masti unlimited 😍",
-        "🔥 Ab group aur bhi mast hone wala hai!"
+      // Image links (aapke diye hue)
+      const images = [
+        "https://i.supaimg.com/90e27f8c-cae4-4fd4-96a8-a7ab0275dd70.jpg",
+        "https://i.supaimg.com/e847f151-772a-499d-ac8c-ef26368c4fb9.jpg",
+        "https://i.supaimg.com/02382816-6fc2-4c03-a73e-6606b05bdee3.jpg"
       ];
-      const randomLine = randomLines[Math.floor(Math.random() * randomLines.length)];
 
-      // ✅ Yaha Owner Info apna dalna
-      const ownerInfo = `
-👑 My Owner: AK
-📩 Contact: https://m.me/100088677459075
-      `;
+      // Random image choose
+      const imageUrl = images[Math.floor(Math.random() * images.length)];
 
-      // ✅ Yaha multiple Imgur/URL media links dal sakte ho
-      const mediaLinks = [
-        "https://i.imgur.com/yourImage1.jpg",
-        "https://i.imgur.com/yourImage2.gif",
-        "https://i.imgur.com/yourVideo.mp4"
-      ];
-      const mediaUrl = mediaLinks[Math.floor(Math.random() * mediaLinks.length)];
+      // Owner details (aap update kar lena)
+      const ownerName = "AK";
+      const ownerUID = "100088677459075";
 
       const msg = {
-        body: `🌸 Welcome @${nameArray.join(", ")} 🌸\n\n` +
-              `📌 Group: ${threadName}\n` +
-              `👥 Member No: ${memLength.join(", ")}\n\n` +
-              `${randomLine}\n\n` +
-              `${ownerInfo}`,
-        mentions,
-        attachment: await global.utils.getStreamFromURL(mediaUrl)
+        body: `👋 Welcome ${name}!\n\n🎉 Group me swagat hai!\n\n👑 Owner: ${ownerName}\n🔗 FB: https://facebook.com/${ownerUID}`,
+        attachment: await global.utils.getStreamFromURL(imageUrl)
       };
 
       return api.sendMessage(msg, threadID);
-
-    } catch (e) {
-      console.error("joinNoti error:", e);
     }
+  } catch (err) {
+    console.error("JoinNoti error:", err);
   }
 };
