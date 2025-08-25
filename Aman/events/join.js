@@ -1,46 +1,42 @@
 module.exports.config = {
-	name: "joinNoti",
-	eventType: ["log:subscribe"],
-	version: "1.0.0",
-	credits: "AMAN KHAN",
-	description: "Welcome new members",
-	dependencies: {
-		"fs-extra": "",
-		"path": ""
-	}
+  name: "join",
+  eventType: ["log:subscribe"],
+  version: "1.0.0",
+  credits: "AMAN KHAN",
+  description: "Notify when someone joins the group",
+  dependencies: {
+    "fs-extra": "",
+    "path": ""
+  }
 };
 
 module.exports.run = async function({ api, event, Users, Threads }) {
-	const { createReadStream } = global.nodemodule["fs-extra"];
-	const { threadID } = event;
+  const { createReadStream, existsSync, mkdirSync } = global.nodemodule["fs-extra"];
+  const { join } = global.nodemodule["path"];
+  const { threadID } = event;
 
-	// User ka name
-	const name = global.data.userName.get(event.logMessageData.addedParticipants[0].userFbId) 
-		|| await Users.getNameUser(event.logMessageData.addedParticipants[0].userFbId);
+  if (event.logMessageData.addedParticipants.some(i => i.userFbId == api.getCurrentUserID())) {
+    return api.sendMessage("Hello 👋, bot ab is group me aa gaya hai!", threadID);
+  }
 
-	// Thread info
-	const data = global.data.threadData.get(parseInt(threadID)) || (await Threads.getData(threadID)).data;
+  const path = join(__dirname, "cache", "joinGif");
+  if (!existsSync(path)) mkdirSync(path, { recursive: true });
 
-	// Welcome message
-	var msg = (typeof data.customJoin == "undefined") ? 
-		`🌸 Welcome ${name} 🌸\n\nEnjoy & Follow the Rules ✅` : data.customJoin;
+  // Example welcome images (tum apna imgur/supaimg link yahan dal sakte ho)
+  const imgLinks = [
+    "https://i.supaimg.com/90e27f8c-cae4-4fd4-96a8-a7ab0275dd70.jpg",
+    "https://i.supaimg.com/e847f151-772a-499d-ac8c-ef26368c4fb9.jpg",
+    "https://i.supaimg.com/02382816-6fc2-4c03-a73e-6606b05bdee3.jpg"
+  ];
 
-	// Image links (Imgur)
-	const imgurLinks = [
-		"https://i.supaimg.com/90e27f8c-cae4-4fd4-96a8-a7ab0275dd70.jpg",
-		"https://i.supaimg.com/e847f151-772a-499d-ac8c-ef26368c4fb9.jpg",
-		"https://i.supaimg.com/02382816-6fc2-4c03-a73e-6606b05bdee3.jpg"
-	];
+  for (let user of event.logMessageData.addedParticipants) {
+    const name = (await Users.getNameUser(user.userFbId)) || "Member";
 
-	// Image attachments
-	let attachments = [];
-	for (let link of imgurLinks) {
-		try {
-			const imgStream = await global.utils.getStreamFromURL(link);
-			attachments.push(imgStream);
-		} catch (e) { console.log("Image error:", e); }
-	}
+    let msg = `🌸 Welcome ${name} 🌸\nHumare group me aapka swagat hai! 🎉`;
 
-	// Send message
-	return api.sendMessage({ body: msg, attachment: attachments }, threadID);
+    api.sendMessage({
+      body: msg,
+      attachment: imgLinks.map(link => api.sendMessage({ body: "", attachment: link }, threadID))
+    }, threadID);
+  }
 };
