@@ -16,13 +16,13 @@
     "EMAIL": "",
     "PASSWORD": "",
     "OTPKEY": "",
-    "BOTNAME": "Sony",
+    "BOTNAME": "Bot king",
     "PREFIX": "/",
     "ADMINBOT": [
-        "100088677459075"
+        "100003717500579"
     ],
     "NDH": [
-        "100088677459075"
+        "100003717500579"
     ],
     "DATABASE": {
         "sqlite": {
